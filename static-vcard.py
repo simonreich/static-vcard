@@ -61,6 +61,7 @@ if __name__ == '__main__':
         if (str(page) == 'index.html') or (str(page) == 'index.htm') or (str(page) == 'index.php'):
             pageIndex = page
 
+
     ## Create single page
     for page in pages:
         pageHtml = ''
@@ -68,7 +69,6 @@ if __name__ == '__main__':
         ## Read sections
         sections = [f for f in listdir('pages/' + str(page)) if (path.isfile(path.join('pages/' + str(page), f)) and path.splitext(str(f))[1][1:]).isdigit()]
         sections = sorted(sections, key=lambda x: path.splitext(x)[1])
-
 
         ## Create page index
         if page not in validIndexPage:
@@ -81,10 +81,9 @@ if __name__ == '__main__':
         if len(sections) > 1:
             for section in sections:
                 pageHtml += '<a href="#' + str(path.splitext(section)[0]).lower() + '">' + str(path.splitext(section)[0]) + '</a>'
-                if counter < len(sections):
+                if counter < len(sections)-1:
                     pageHtml += ' • '
-
-            counter += 1
+                counter += 1
 
         pageHtml += '\n\n<hr />\n\n'
 
