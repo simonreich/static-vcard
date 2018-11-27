@@ -58,7 +58,7 @@ if __name__ == '__main__':
     ## Find name of index page
     pageIndex = ''
     for page in pages:
-        if (str(page) == 'index.html') or (str(page) == 'index.htm') or (str(page) == 'index.php'):
+        if str(page) in validIndexPage:
             pageIndex = page
 
 
