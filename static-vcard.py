@@ -36,11 +36,13 @@ if __name__ == '__main__':
     ## Read header
     headerFile = open('template/header.html', 'r')
     headerHtml = headerFile.read()
+    headerFile.close()
 
 
     ## Read footer
     footerFile = open('template/footer.html', 'r')
     footerHtml = footerFile.read()
+    footerFile.close()
 
  
     ## Create out folder
@@ -94,6 +96,7 @@ if __name__ == '__main__':
             pageHtml += '<h2>' + str(path.splitext(section)[0]) + '</h2>\n\n'
             sectionFile = open('pages/' + page + '/' + section, 'r')
             pageHtml += sectionFile.read()
+            sectionFile.close()
  
             pageHtml += '\n<a href="#top">top</a><hr />\n\n'
  
