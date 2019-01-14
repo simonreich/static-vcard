@@ -69,7 +69,7 @@ if __name__ == '__main__':
         pageHtml = ''
 
         ## Read sections
-        sections = [f for f in listdir('pages/' + str(page)) if (path.isfile(path.join('pages/' + str(page), f)) and path.splitext(str(f))[1][1:]).isdigit()]
+        sections = [f for f in listdir('pages/' + str(page)) if (path.isfile(path.join('pages/' + str(page), f)) and path.splitext(str(f))[1][1:].isdigit())]
         sections = sorted(sections, key=lambda x: path.splitext(x)[1])
 
         ## Create page index
