@@ -28,9 +28,23 @@ from os import listdir, path, makedirs
 from distutils.dir_util import copy_tree
 
 
+def sanitizeFilename(_filename):
+    """ Sanitizes a filename
+        Input: string filename
+        Return: string sanitized filename
+    """
+    filename= _filename.lower()
+    filename = filename.replace(" ", "-")
+    return filename
+
+
 if __name__ == '__main__':
     ## List of valid index pages
     validIndexPage = ['index.html', 'index.htm', 'index.php']
+
+
+    ## List of valid impressum pages
+    validImpressumPage = ['impressum.html', 'impressum.htm', 'impressum.php']
 
 
     ## Read header
@@ -54,18 +68,20 @@ if __name__ == '__main__':
 
 
     ## Create page list
-    pages = [f for f in listdir('pages') if path.isdir(path.join('pages', f))]
-
-
-    ## Find name of index page
-    pageIndex = ''
-    for page in pages:
-        if str(page) in validIndexPage:
-            pageIndex = page
+    pages = [f for f in listdir('pages') if (path.isdir(path.join('pages', f)) and path.splitext(str(f))[1][1:].isdigit())]
+    pages = sorted(pages, key=lambda x: path.splitext(x)[1])
 
 
     ## Create single page
     for page in pages:
+        ## Remove integer from file path
+        pagePath = path.splitext(page)[0]
+        pageName = path.splitext(pagePath)[0]
+
+        ## Sanity path
+        pagePath = sanitizeFilename(pagePath)
+
+        ## HTML for this page
         pageHtml = ''
 
         ## Read sections
@@ -73,9 +89,30 @@ if __name__ == '__main__':
         sections = sorted(sections, key=lambda x: path.splitext(x)[1])
 
         ## Create page index
-        if page not in validIndexPage:
-            if str(pageIndex) != '':
-                pageHtml += '<a href="' + str(pageIndex) + '">Home</a>'
+        counter = 0
+        if len(pages) > 2:
+            for page1 in pages:
+                ## Remove integer from file path
+                page1Path = path.splitext(page1)[0]
+                page1Name = path.splitext(page1Path)[0]
+        
+                ## Sanity path
+                page1Path = sanitizeFilename(page1Path)
+
+                if page1Path.lower() not in validImpressumPage:
+                    if page1Path.lower() in validIndexPage:
+                        pageHtml += '<a href="/">Home</a>'
+                    else:
+                        pageHtml += '<a href="' + str(page1Path) + '">' + str(page1Name) + '</a>'
+                    if counter < len(pages)-2:
+                        pageHtml += ' • '
+                counter += 1
+            pageHtml += '\n\n<br /><br />\n\n'
+
+        ## Create section index
+        if len(pages) <= 2:
+            if page.lower() not in validIndexPage:
+                pageHtml += '<a href="/">Home</a>'
                 if len(sections) > 1:
                     pageHtml += ' • '
 
@@ -101,7 +138,7 @@ if __name__ == '__main__':
             pageHtml += '\n<a href="#top">top</a><hr />\n\n'
  
         ## Write to file
-        fileIndex = open('out/' + page, 'w') 
+        fileIndex = open('out/' + pagePath, 'w') 
         fileIndex.write(headerHtml) 
         fileIndex.write(pageHtml) 
         fileIndex.write(footerHtml) 
