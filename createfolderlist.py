@@ -54,7 +54,7 @@ if __name__ == '__main__':
         name = filename[:-4]
         name = name.split('_')
         date = name[0].split('-')
-        strOut += '<li><a href=\"static/' + str(filename) + '\">'
+        strOut += '<li><a href=\"/' + str(filename) + '\">'
         if datetime.datetime(int(date[0]), int(date[1]), int(date[2])).weekday() == 0:
             strOut += 'Montag'
         if datetime.datetime(int(date[0]), int(date[1]), int(date[2])).weekday() == 1:
