@@ -35,12 +35,14 @@ The output will be placed into the `out` folder. The above example will create t
   3. `pages/index.html.0/Example 2.2`
   4. `pages/index.html.0/Results.3`
   5. `template/footer.html`
+
 2. `out/Test & Simulation.html`
   1. `template/header.html`
   2. `pages/Test & Simulation.html.1/Reading.1`
   3. `pages/Test & Simulation.html.1/Simulation 1.2`
   4. `pages/Test & Simulation.html.1/Simulation 2.3`
   5. `template/footer.html`
+
 3. `out/empty.css`
 
 Files from the `pages` folder will consist of three parts. First, the html code from `template/header.html` is copied. Second, html code from the sections of each page is appended. Last, the file `template/footer.html` is added. Additionally, a navigation bar is created for each page and each section.
