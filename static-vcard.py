@@ -101,7 +101,7 @@ if __name__ == '__main__':
 
                 if page1Path.lower() not in validImpressumPage:
                     if page1Path.lower() in validIndexPage:
-                        pageHtml += '<a href="/">Home</a>'
+                        pageHtml += '<a href="' + str(page1Path) + '">Home</a>'
                     else:
                         pageHtml += '<a href="' + str(page1Path) + '">' + str(page1Name) + '</a>'
                     if counter < len(pages)-2:
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         ## Create section index
         if len(pages) <= 2:
             if page.lower() not in validIndexPage:
-                pageHtml += '<a href="/">Home</a>'
+                pageHtml += '<a href="' + str(page) + '">Home</a>'
                 if len(sections) > 1:
                     pageHtml += ' • '
 
