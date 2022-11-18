@@ -5,7 +5,7 @@
 """
 Copyright (C) 2019 Simon Reich. Licensed under the GPL (see the license file).
 
-This program reads a folder given by -i parameter and outputs a list of pdf found pdf files into a file specified by the -o parameter
+This program reads a folder given by -i parameter and outputs a list of file formats and their respective total file sizes.
 """
 
 
@@ -17,7 +17,7 @@ import argparse
 
 
 def getFilelist (folder, debug=False):
-    ''' Returns a list of all files containing in folder folder.
+    ''' Returns a list of all files in folder.
         List is sorted alphanumerical.
     '''
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         print('Please specify -i and -o option.')
         raise
 
-    ## List of valid index pages
+    ## List of pdf files
     filelist = getFilelist(folderIn, True)
 
     strOut = '<ul>\n'
