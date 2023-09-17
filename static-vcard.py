@@ -104,7 +104,7 @@ if __name__ == '__main__':
                         pageHtml += '<a href="' + str(page1Path) + '">Home</a>'
                     else:
                         pageHtml += '<a href="' + str(page1Path) + '">' + str(page1Name) + '</a>'
-                    if counter < len(pages)-1:
+                    if counter < len(pages)-2:
                         pageHtml += ' • '
                 counter += 1
             pageHtml += '\n\n<br /><br />\n\n'
