@@ -1,51 +1,50 @@
 # -*- coding: utf-8 -*-
-"""
-This file is part of swarmcontrol.
-swarmcontrol is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-swarmcontrol is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with swarmcontrol.  If not, see <http://www.gnu.org/licenses/>.
-"""
 
+
+"""
+Copyright (C) 2023 Simon Reich. Licensed under the GPL (see the license file).
+
+This program reads a folder and creates for every xcookybooky recipe it finds, an html page.
+"""
 
 
 import argparse
 import os
+import shutil
 
 
 class xcookybooky2html:
     def run(self, folderIn, folderOut):
         # Read file list
-        filenames = os.listdir(folderIn)
+        filenames = [os.sep.join([folderIn, f]) for f in os.listdir(folderIn) if os.path.isfile(os.sep.join([folderIn, f]))]
 
-        cnt = 1
+        # Folders that are created
+        foldersCreated = {}
+
         for filename in filenames:
             # Run
-            results = processOneFile(filename)
+            results = self.processOneFile(filename)
 
-            # Create output folder
-            folderOut = os.sep.join([folderOut, os.path.basename(filename).split("_")[0].capitalize()])
-            if not os.path.exists(folderOut):
-                os.mkdir(folderOut)
-            folderOut = os.sep.join([folderOut, result[0] + ".html" + str(cnt)])
-            if not os.path.exists(folderOut):
-                os.mkdir(folderOut)
+            # Create output folder - 1st level
+            folderOutPath = os.sep.join([folderOut, os.path.basename(filename).split("_")[0].capitalize()])
+            if not os.path.exists(folderOutPath):
+                os.mkdir(folderOutPath)
+            if folderOutPath not in foldersCreated:
+                foldersCreated[folderOutPath] = []
 
             # Write to file
-            fileOut = os.sep.join([folderOut, filename])
-            f = open("Infos", "w")
-            f.write("Woops! I have deleted the content!")
+            fileOut = os.sep.join([folderOutPath, results["header"]])
+            f = open(fileOut, "w")
+            f.write(self.convertResultsToHtml(results))
             f.close()
 
-            cnt += 1
+            foldersCreated[folderOutPath].append(fileOut)
 
-    def processOneFile(self, filename)
+        # static-vcard needs enumeration and extension of pages to be created
+        self.renameFilesAndFolders(foldersCreated)
+
+
+    def processOneFile(self, filename):
         with open(filename) as f:
             lines = f.readlines()
         text = ("".join(lines))
@@ -54,12 +53,49 @@ class xcookybooky2html:
         textPieces = self.getFirstLevel(text)
 
         # Sanitize
-        header = self.extractHeader(textPieces[2])
-        metainfo = self.extractMetainfo(textPieces[1])
-        ingredients = self.extractIngredients(textPieces[3])
-        steps = self.extractSteps(textPieces[4])
+        results = {
+                "header":self.extractHeader(textPieces[2]),
+                "metainfo":self.extractMetainfo(textPieces[1]),
+                "ingredients":self.extractIngredients(textPieces[3]),
+                "steps":self.extractSteps(textPieces[4])
+                }
 
-        return [header, metainfo, ingredients, steps]
+        return results
+
+
+    def renameFilesAndFolders(self, foldersCreated):
+        cntFolder = 1
+        for folder in foldersCreated:
+            # Enumerate files inside folder
+            cntFile = 1
+            for filename in foldersCreated[folder]:
+                filenameFrom = filename
+                filenameTo = filename + '.' + str(cntFile)
+                if os.path.isfile(filenameTo):
+                    os.remove(filenameTo)
+                os.rename(filenameFrom, filenameTo)
+                cntFile += 1
+
+            # Enumerate folder
+            folderPathFrom = folder
+            folderPathTo = folder + '.html.' + str(cntFolder)
+            if os.path.isdir(folderPathTo):
+                shutil.rmtree(folderPathTo)
+            os.rename(folderPathFrom, folderPathTo)
+            cntFolder += 1
+
+
+    def convertResultsToHtml(self, results):
+        html = ''
+        metainfo = self.createHtmlTable(results["metainfo"])
+        ingredients = self.createHtmlTable(results["ingredients"])
+        steps = self.createHtmlOl(results["steps"])
+
+        html += metainfo + '\n'
+        html += '<h3>Zutaten</h3>\n' + ingredients + '\n'
+        html += '<h3>Zubereitung</h3>\n' + steps + '\n'
+
+        return html
         
 
 
@@ -76,8 +112,6 @@ class xcookybooky2html:
             pos = indices[i][0]
             typ = indices[i][2]
             state = indices[i][3]
-
-            print(i, typ, currentTyp, state, currentState, BracketCounter)
 
             if currentState == "close" and state == "open":
                 currentStartIndex = i
@@ -112,10 +146,13 @@ class xcookybooky2html:
 
 
     def extractHeader(self, text):
+        header = ""
         if "label" in text:
-            return text[0:text.index("\\label")].strip()
+            header = text[0:text.index("\\label")].strip()
         else:
-            return text.strip()
+            header = text.strip()
+
+        return self.cleanLatex(header)
 
     def extractSteps(self, text):
         clean = [self.cleanLatex(x) for x in text.split("\n")]
@@ -140,10 +177,23 @@ class xcookybooky2html:
         text = text.replace("\\\\", "")
         text = text.replace("\\portion", "")
         text = text.replace("\\url", "")
+        text = text.replace(" \\textcelcius", "°")
+        text = text.replace("\\`e", "è")
+        text = text.replace("\\´e", "é")
+        text = text.replace("\\`e", "è")
+        text = text.replace("\\^a", "â")
+        text = text.replace("\\^e", "ê")
+        text = text.replace("\\^i", "î")
+        text = text.replace("\\^o", "ô")
+        text = text.replace("\\^u", "û")
+        text = text.replace("\\", "")
+        text = text.replace("--", "–")
         text = text.replace("preparationtime", "Vorbereitungszeit")
         text = text.replace("portion", "Portion")
         text = text.replace("calory", "Kalorien")
         text = text.replace("source", "Quelle")
+        text = text.replace("bakingtime", "Backzeit")
+        text = text.replace("bakingtemperature", "Temperatur")
         return text.strip()
 
 
@@ -166,6 +216,34 @@ class xcookybooky2html:
         return clean
 
 
+    def createHtmlTable(self, lines):
+        ## Generate HTML
+        strOut = '<table>\n'
+        for line in lines:
+            strOut += '  <tr>\n'
+            for item in line:
+                if "http" in item:
+                    itemtext = '<a href="' + item + '">' + item + '</a>'
+                else:
+                    itemtext = item
+
+                strOut += '    <td>' + itemtext + '</td>\n'
+            strOut += '  </tr>\n'
+        
+        strOut += '</table>\n'
+        return strOut
+
+
+    def createHtmlOl(self, lines):
+        ## Generate HTML
+        strOut = '<ol>\n'
+        for line in lines:
+            strOut += '  <li>' + line + '</li>\n'
+
+        strOut += '</ol>\n'
+        return strOut
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", help="Input folder holding xcookybooky files.")
@@ -173,10 +251,10 @@ def main():
     args = parser.parse_args()
 
     folderIn = None
-    if args.t:
-        fileIn = args.i
+    if args.i:
+        folderIn = args.i
     else:
-        print('No input file given.')
+        print('No input folder given.')
         raise
 
     folderOut = None
