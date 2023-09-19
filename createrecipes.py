@@ -223,7 +223,7 @@ class xcookybooky2html:
             strOut += '  <tr>\n'
             for item in line:
                 if "http" in item:
-                    itemtext = '<a href="' + item + '">' + item + '</a>'
+                    itemtext = '<a href="' + item + '">Internet</a>'
                 else:
                     itemtext = item
 
