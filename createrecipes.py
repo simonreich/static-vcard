@@ -65,10 +65,10 @@ class xcookybooky2html:
 
     def renameFilesAndFolders(self, foldersCreated):
         cntFolder = 1
-        for folder in foldersCreated:
+        for (folder, filenames) in sorted(foldersCreated.items()):
             # Enumerate files inside folder
             cntFile = 1
-            for filename in foldersCreated[folder]:
+            for filename in sorted(foldersCreated[folder]):
                 filenameFrom = filename
                 filenameTo = filename + '.' + str(cntFile)
                 if os.path.isfile(filenameTo):
