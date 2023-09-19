@@ -15,8 +15,8 @@ import shutil
 
 class xcookybooky2html:
     def run(self, folderIn, folderOut):
-        # Read file list
-        filenames = [os.sep.join([folderIn, f]) for f in os.listdir(folderIn) if os.path.isfile(os.sep.join([folderIn, f]))]
+        # Read file list *tex
+        filenames = [os.sep.join([folderIn, f]) for f in os.listdir(folderIn) if os.path.isfile(os.sep.join([folderIn, f])) and os.path.splitext(f)[1] == ".tex"]
 
         # Folders that are created
         foldersCreated = {}
@@ -60,6 +60,10 @@ class xcookybooky2html:
                 "steps":self.extractSteps(textPieces[4])
                 }
 
+        # Check for hints
+        if len(textPieces) > 6:
+            results["hints"] = self.extractSteps(textPieces[5])
+
         return results
 
 
@@ -94,6 +98,10 @@ class xcookybooky2html:
         html += metainfo + '\n'
         html += '<h3>Zutaten</h3>\n' + ingredients + '\n'
         html += '<h3>Zubereitung</h3>\n' + steps + '\n'
+
+        if "hints" in results:
+            hints = self.createHtmlOl(results["hints"])
+            html += '<h3>Tipps</h3>\n' + hints + '\n'
 
         return html
         
@@ -154,47 +162,11 @@ class xcookybooky2html:
 
         return self.cleanLatex(header)
 
+
     def extractSteps(self, text):
         clean = [self.cleanLatex(x) for x in text.split("\n")]
         clean = [x for x in clean if len(x) > 5]
         return clean
-
-
-    def cleanLatex(self, text):
-        text = text.replace("\\step", "")
-        text = text.replace("\\unit[", "")
-        text = text.replace("]{", " ")
-        text = text.replace("}", "")
-        text = text.replace("{", "")
-        text = text.replace('\"O', "Ö")
-        text = text.replace('\"U', "Ü")
-        text = text.replace('\"A', "Ä")
-        text = text.replace('\"o', "ö")
-        text = text.replace('\"u', "ü")
-        text = text.replace('\"a', "ä")
-        text = text.replace("\\ss", "ß")
-        text = text.replace("\\ss", "ß ")
-        text = text.replace("\\\\", "")
-        text = text.replace("\\portion", "")
-        text = text.replace("\\url", "")
-        text = text.replace(" \\textcelcius", "°")
-        text = text.replace("\\`e", "è")
-        text = text.replace("\\´e", "é")
-        text = text.replace("\\`e", "è")
-        text = text.replace("\\^a", "â")
-        text = text.replace("\\^e", "ê")
-        text = text.replace("\\^i", "î")
-        text = text.replace("\\^o", "ô")
-        text = text.replace("\\^u", "û")
-        text = text.replace("\\", "")
-        text = text.replace("--", "–")
-        text = text.replace("preparationtime", "Vorbereitungszeit")
-        text = text.replace("portion", "Portion")
-        text = text.replace("calory", "Kalorien")
-        text = text.replace("source", "Quelle")
-        text = text.replace("bakingtime", "Backzeit")
-        text = text.replace("bakingtemperature", "Temperatur")
-        return text.strip()
 
 
     def extractIngredients(self, text):
@@ -214,6 +186,46 @@ class xcookybooky2html:
         f = lambda x : [y.strip() for y in x]
         clean = [f(x) for x in clean]
         return clean
+
+
+    def cleanLatex(self, text):
+        text = text.replace("\\frac", "")
+        text = text.replace("\\step", "")
+        text = text.replace("\\unit[", "")
+        text = text.replace("]{", " ")
+        text = text.replace("}", "")
+        text = text.replace("{", "")
+        text = text.replace('\"O', "Ö")
+        text = text.replace('\"U', "Ü")
+        text = text.replace('\"A', "Ä")
+        text = text.replace('\"o', "ö")
+        text = text.replace('\"u', "ü")
+        text = text.replace('\"a', "ä")
+        text = text.replace("\\ss\\", "ß ")
+        text = text.replace("\\ss ", "ß")
+        text = text.replace("\\ss", "ß")
+        text = text.replace("\\\\", "")
+        text = text.replace("\\portion", "")
+        text = text.replace("\\url", "")
+        text = text.replace(" \\textcelcius", "°")
+        text = text.replace("\\`e", "è")
+        text = text.replace("\\´e", "é")
+        text = text.replace("\\`e", "è")
+        text = text.replace("\\^a", "â")
+        text = text.replace("\\^e", "ê")
+        text = text.replace("\\^i", "î")
+        text = text.replace("\\^o", "ô")
+        text = text.replace("\\^u", "û")
+        text = text.replace("\\", "")
+        text = text.replace("$", "")
+        text = text.replace("--", "–")
+        text = text.replace("preparationtime", "Vorbereitungszeit")
+        text = text.replace("portion", "Portion")
+        text = text.replace("calory", "Kalorien")
+        text = text.replace("source", "Quelle")
+        text = text.replace("bakingtime", "Backzeit")
+        text = text.replace("bakingtemperature", "Temperatur")
+        return text.strip()
 
 
     def createHtmlTable(self, lines):
