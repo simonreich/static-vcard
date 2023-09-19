@@ -108,14 +108,17 @@ if __name__ == '__main__':
                         pageHtml += ' • '
                 counter += 1
             pageHtml += '\n\n<br /><br />\n\n'
-
-        ## Create section index
-        if len(pages) <= 2:
-            if page.lower() not in validIndexPage:
-                pageHtml += '<a href="' + str(page) + '">Home</a>'
+        else:
+            ## Remove integer from file path
+            page1Path = path.splitext(page1)[0]
+            page1Name = path.splitext(page1Path)[0]
+            if page1Path.lower() not in validIndexPage:
+                pageHtml += '<a href="' + str(page1Path) + '">Home</a>'
                 if len(sections) > 1:
                     pageHtml += ' • '
 
+
+        ## Create section index
         counter = 0
         if len(sections) > 1:
             for section in sections:
