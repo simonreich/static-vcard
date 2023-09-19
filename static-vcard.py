@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     ## Create page list
     pages = [f for f in listdir('pages') if (path.isdir(path.join('pages', f)) and path.splitext(str(f))[1][1:].isdigit())]
-    pages = sorted(pages, key=lambda x: path.splitext(x)[1])
+    pages = sorted(pages, key=lambda x: int(path.splitext(x)[1][1:]))
 
 
     ## Create single page
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
         ## Read sections
         sections = [f for f in listdir('pages/' + str(page)) if (path.isfile(path.join('pages/' + str(page), f)) and path.splitext(str(f))[1][1:].isdigit())]
-        sections = sorted(sections, key=lambda x: path.splitext(x)[1])
+        sections = sorted(sections, key=lambda x: int(path.splitext(x)[1][1:]))
 
         ## Create page index
         counter = 0
