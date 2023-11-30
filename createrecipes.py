@@ -208,6 +208,7 @@ class xcookybooky2html:
         text = text.replace("\\portion", "")
         text = text.replace("\\url", "")
         text = text.replace(" \\textcelcius", "°")
+        text = text.replace("\\textcelcius", "°")
         text = text.replace("\\`e", "è")
         text = text.replace("\\´e", "é")
         text = text.replace("\\`e", "è")
@@ -278,7 +279,6 @@ def main():
 
     Xcookybooky2html = xcookybooky2html()
     Xcookybooky2html.run(folderIn, folderOut)
-
 
 
 if __name__ == "__main__":
