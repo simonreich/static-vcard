@@ -1,0 +1,21 @@
+{
+  "module_load": "load_from_json",
+  "module_export": "export_to_html",
+  "export_to_latex": {
+    "path_to_out_main": "/home/simon/git/hp_volle-wahrheit.simonreich.de/latex/out",
+    "path_to_out_pages": "/home/simon/git/hp_volle-wahrheit.simonreich.de/latex/out/pages_generated",
+    "delete_old_files": true,
+    "path_to_main_template": "/home/simon/git/hp_volle-wahrheit.simonreich.de/latex/templates/volle-wahrheit.tex.jinja",
+    "path_to_page_template": "/home/simon/git/hp_volle-wahrheit.simonreich.de/latex/templates/page.tex.jinja"
+  },
+  "export_to_html": {
+    "path_to_out_main": "/home/simon/git/hp_volle-wahrheit.simonreich.de/html/out",
+    "path_to_out_pages": "/home/simon/git/hp_volle-wahrheit.simonreich.de/html/out/pages_generated",
+    "delete_old_files": true,
+    "path_to_main_template": "/home/simon/git/hp_volle-wahrheit.simonreich.de/html/templates/index.version.html.jinja",
+    "path_to_page_template": "/home/simon/git/hp_volle-wahrheit.simonreich.de/html/templates/page.html.jinja"
+  },
+  "load_from_json": {
+    "path_to_json_files": "/home/simon/git/hp_volle-wahrheit.simonreich.de/database"
+  }
+}

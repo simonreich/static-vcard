@@ -1,0 +1,71 @@
+<table>
+{%- if recipe.preparation_time_minutes != None and recipe.preparation_time_minutes != '' %}
+  <tr>
+    <td>Vorbereitungszeit</td>
+    <td> {{- recipe.preparation_time_minutes -}} &nbsp;min</td>
+  </tr>
+{%- endif %}
+{%- if recipe.baking_time_minutes != None and recipe.baking_time_minutes != '' %}
+  <tr>
+    <td>Backzeit</td>
+    <td> {{- recipe.baking_time_minutes -}} &nbsp;min</td>
+  </tr>
+{%- endif %}
+{%- if recipe.cooking_time_minutes != None and recipe.cooking_time_minutes != '' %}
+  <tr>
+    <td>Kochyeit</td>
+    <td> {{- recipe.cooking_time_minutes -}} &nbsp;min</td>
+  </tr>
+{%- endif %}
+{%- if recipe.baking_temperature_celcius != None and recipe.baking_temperature_celcius != '' %}
+  <tr>
+    <td>Temperatur</td>
+    <td> {{- recipe.baking_temperature_celcius -}} °C</td>
+  </tr>
+{%- endif %}
+{%- if recipe.portion != None and recipe.portion != '' %}
+  <tr>
+    <td>Portion</td>
+    <td> {{- recipe.portion -}} </td>
+  </tr>
+{%- endif %}
+{%- if recipe.source != None and recipe.source != '' %}
+  <tr>
+    <td>Quelle</td>
+    <td> {{- recipe.source -}} </td>
+  </tr>
+{%- endif %}
+</table>
+
+<h3>Zutaten</h3>
+
+{%- for ingredientlist in recipe.ingredients_all %}
+{%- if ingredientlist.name != None and ingredientlist.name != '' %}
+
+<h4> {{- ingredientlist.name -}} </h4>
+{%- endif %}
+
+<table>
+{%- for ingredient in ingredientlist.ingredients %}
+  <tr>
+    <td> {{- ingredient.quantity -}} &nbsp; {{- ingredient.unit -}}</td>
+    <td> {{- ingredient.name -}} </td>
+  </tr>
+{%- endfor %}
+</table>
+{%- endfor %}
+
+<h3>Zubereitung</h3>
+
+<ol>
+{%- for step in recipe.steps %}
+  <li> {{- step -}} </li>
+{%- endfor %}
+</ol>
+{% if recipe.hint != None and recipe.hint != '' %}
+<h3>Tipps</h3>
+
+<ol>
+  <li> {{- recipe.hint -}} </li>
+</ol>
+{% endif -%}

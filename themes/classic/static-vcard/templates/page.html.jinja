@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/main.css">
+
+<title>Die volle Wahrheit</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Rezepte, Recipes">
+
+<a name="top"></a>
+<h1><a href="/" style="text-decoration:none;color:black">Die volle Wahrheit</a></h1>
+
+{% for item in map_of_menu -%}
+<a href=" {{- item.url -}} "> {{- item.name -}} </a>{{ ' • ' if not loop.last -}}
+{%- endfor %}
+
+<br /><br />
+
+{% for item in map_of_menu_sections -%}
+<a href=" {{- item.url -}} "> {{- item.name -}} </a>{{ ' • ' if not loop.last -}}
+{%- endfor %}
+
+<hr />
+
+{% for section in sections -%}
+<a name="# {{- section.anchor -}}"></a>
+<h2>{{- section.name -}} </h2>
+
+{{ section.html }}
+
+<a href="#top">top</a><hr />
+{%- endfor %}
+
+<div style="text-align:right"><a href="impressum.html">Impressum, Datenschutzerklärung</a></div>
+</html>
