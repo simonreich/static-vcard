@@ -72,6 +72,7 @@ class StaticVcard:
         copytree(self.folder_pages_generated, self.folder_pages_temp, dirs_exist_ok=True)
         copytree(self.folder_pages_static, self.folder_pages_temp, dirs_exist_ok=True)
 
+
     def sanitizeFilename(self, filename: str) -> str:
         """ Sanitizes a filename
             Input: string filename
@@ -152,7 +153,8 @@ class StaticVcard:
                                                {'map_of_pages': self.map_of_pages, 
                                                 'sections': page['sections'], 
                                                 'map_of_menu': self.map_of_menu, 
-                                                'map_of_menu_sections': self.map_of_menu_sections[page['name']]
+                                                'map_of_menu_sections': self.map_of_menu_sections[page['name']],
+                                                'compile_timestap': self.helper.get_timestamp()
                                                })
 
         copytree(join(self.path_to_root, 'static'), 'out', dirs_exist_ok=True)
