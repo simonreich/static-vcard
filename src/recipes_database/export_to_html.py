@@ -107,7 +107,8 @@ class ExportToHtml(export_interface.ExportInterface, export_base.ExportBase):
 
         This function uses self.index_pages, which is built in export_pages().
         """
-        path_to_file_out = join(self.page_folders['index'], 'Version.3')
-        timestamp = self.helper.get_timestamp()
-        self.helper.write_template_to_file(self.path_to_main_template, path_to_file_out, {'timestamp': timestamp})
+        #path_to_file_out = join(self.page_folders['index'], 'Version.3')
+        #timestamp = self.helper.get_timestamp()
+        #self.helper.write_template_to_file(self.path_to_main_template, path_to_file_out, {'timestamp': timestamp})
+        pass
 

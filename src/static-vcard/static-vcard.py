@@ -96,6 +96,7 @@ class StaticVcard:
 
             # Second level
             files = [join(folder, f) for f in listdir(folder) if splitext(str(f))[1][1:].isdigit()]
+            files = sorted(files, key=lambda x: int(splitext(x)[1][1:]))
          
             sections = []
             for file in files:
@@ -149,7 +150,18 @@ class StaticVcard:
     def export(self) -> None:
         for page in self.map_of_pages:
             path_to_file_out = join(self.path_to_out, page['filename_out'])
+
+            # 1. Build pages via template
             self.helper.write_template_to_file(self.path_to_page_template, path_to_file_out, 
+                                               {'map_of_pages': self.map_of_pages, 
+                                                'sections': page['sections'], 
+                                                'map_of_menu': self.map_of_menu, 
+                                                'map_of_menu_sections': self.map_of_menu_sections[page['name']],
+                                                'compile_timestap': self.helper.get_timestamp()
+                                               })
+
+            # 2. Use page as template for inline replacements
+            self.helper.write_template_to_file(path_to_file_out, path_to_file_out, 
                                                {'map_of_pages': self.map_of_pages, 
                                                 'sections': page['sections'], 
                                                 'map_of_menu': self.map_of_menu, 
