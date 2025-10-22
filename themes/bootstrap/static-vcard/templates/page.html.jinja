@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Die volle Wahrheit</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="index.html">Die volle Wahrheit</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+{% for item in map_of_menu -%}
+
+  {% if item.sections|length > 0 %}
+    {% for section in item.sections -%}
+      {% if loop.first -%}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href=" {{- item.url -}} " role="button" data-bs-toggle="dropdown" aria-expanded="false"> {{- item.name -}} </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+      {% endif -%}
+      <li><a class="dropdown-item" href=" {{- section.url -}} "> {{- section.name -}} </a></li>
+      {% if loop.last -%}
+                                </ul>
+                            </li>
+      {% endif -%}
+    {%- endfor %}
+  {%- else %}
+                            <li class="nav-item"><a class="nav-link" href=" {{- item.url -}} "> {{- item.name -}} </a></li>
+  {% endif -%}
+{%- endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+{% for section in sections -%}
+            <div class="container-sm px-2 my-2">
+<a name=" {{- section.anchor -}}"></a>
+{{ section.html }}
+            </div>
+{%- endfor %}
+        </main>
+        <!-- Bootstrap core JS-->
+        <script src="bootstrap-5.3.4-dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,82 @@
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title"> {{- recipe.name -}} </h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-sm">
+        {%- if recipe.preparation_time_minutes != None and recipe.preparation_time_minutes != '' %}
+          <tr>
+            <td>Vorbereitungszeit</td>
+            <td> {{- recipe.preparation_time_minutes -}} &nbsp;min</td>
+          </tr>
+        {%- endif %}
+        {%- if recipe.baking_time_minutes != None and recipe.baking_time_minutes != '' %}
+          <tr>
+            <td>Backzeit</td>
+            <td> {{- recipe.baking_time_minutes -}} &nbsp;min</td>
+          </tr>
+        {%- endif %}
+        {%- if recipe.cooking_time_minutes != None and recipe.cooking_time_minutes != '' %}
+          <tr>
+            <td>Kochzeit</td>
+            <td> {{- recipe.cooking_time_minutes -}} &nbsp;min</td>
+          </tr>
+        {%- endif %}
+        {%- if recipe.baking_temperature_celcius != None and recipe.baking_temperature_celcius != '' %}
+          <tr>
+            <td>Temperatur</td>
+            <td> {{- recipe.baking_temperature_celcius -}} °C</td>
+          </tr>
+        {%- endif %}
+        {%- if recipe.portion != None and recipe.portion != '' %}
+          <tr>
+            <td>Portion</td>
+            <td> {{- recipe.portion -}} </td>
+          </tr>
+        {%- endif %}
+        {%- if recipe.source != None and recipe.source != '' %}
+          <tr>
+            <td>Quelle</td>
+            <td> {{- recipe.source -}} </td>
+          </tr>
+        {%- endif %}
+        </table>
+     </div>
+     <div class="card-body">
+         <h5 class="card-title">Zutaten</h5>
+         {%- for ingredientlist in recipe.ingredients_all %}
+         {%- if ingredientlist.name != None and ingredientlist.name != '' %}
+         
+         </br><h6> {{- ingredientlist.name -}} </h6>
+         {%- endif %}
+         
+         <table class="table table-striped table-sm">
+         {%- for ingredient in ingredientlist.ingredients %}
+           <tr>
+             <td> {{- ingredient.quantity -}} &nbsp; {{- ingredient.unit -}}</td>
+             <td> {{- ingredient.name -}} </td>
+           </tr>
+         {%- endfor %}
+         </table>
+         {%- endfor %}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Zubereitung</h5>
+        <ol class="list-group">
+        {%- for step in recipe.steps %}
+          <li class="list-group-item"> {{- step -}} </li>
+        {%- endfor %}
+        </ol>
+    </div>
+    {% if recipe.hint != None and recipe.hint != '' %}
+    <div class="card-body">
+        <h5 class="card-title">Tipp</h5>
+        <ol class="list-group">
+            <li class="list-group-item"> {{- recipe.hint -}} </li>
+        </ol>
+    </div>
+    {% endif -%}
+    <div class="card-body">
+        <a href="#top" class="btn btn-primary">Top</a>
+    </div>
+</div>

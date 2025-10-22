@@ -1,0 +1,19 @@
+             <div class="row gx-4 gx-lg-5">
+{% for item in map_of_menu -%}
+                <div class="col-md-4 mb-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title"> {{- item.name -}} </h4>
+                        </div>
+                        <ul class="list-group list-group-flush">
+{% for section in item.sections -%}
+                            <li class="list-group-item"><a href=" {{- section.url -}} " class="card-link"> {{- section.name -}} </a></li>
+{%- endfor %}
+                        </ul>
+                   </div>
+                </div>
+{%- endfor %}
+            </div>
+
+
+

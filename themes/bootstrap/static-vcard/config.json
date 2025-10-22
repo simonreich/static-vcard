@@ -1,0 +1,9 @@
+{
+  "path_to_root": "/home/simon/git/hp_volle-wahrheit.simonreich.de/static-vcard",
+  "path_to_out": "/home/simon/git/hp_volle-wahrheit.simonreich.de/static-vcard/out",
+  "path_to_page_template": "/home/simon/git/hp_volle-wahrheit.simonreich.de/static-vcard/templates/page.html.jinja",
+  "delete_old_files": true,
+  "rename_in_menu": {},
+  "deny_in_menu": ["impressum", "index"],
+  "min_length_in_menu": 0
+}
