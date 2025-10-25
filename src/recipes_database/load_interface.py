@@ -33,3 +33,7 @@ class LoadInterface(ABC):
     @abstractmethod
     def get_tags(self):
         pass
+
+    @abstractmethod
+    def get_tags_as_dict(self):
+        pass

@@ -53,6 +53,13 @@ class LoadFromJson(load_interface.LoadInterface):
         return sorted(list(set(tags)))
 
 
+    def get_tags_as_dict(self):
+        tags = {}
+        for tag in self.get_tags():
+            tags[tag] = self.get_recipies_by_tag(tag)
+        return tags
+
+
     def check_config(self):
         check_for_items = ["path_to_json_files"]
         for item in check_for_items:

@@ -45,6 +45,23 @@ class ExportToHtml(export_interface.ExportInterface, export_base.ExportBase):
                 recipe.source = '<a href="' + recipe.source + '">Internet</a>'
 
 
+    def create_expected_url(self) -> None:
+        def sanitizeFilename(filename: str) -> str:
+            """ Sanitizes a filename
+                Input: string filename
+                Return: string sanitized filename
+            """
+            filename = filename.lower()
+            filename = filename.replace(" ", "-")
+            return filename
+
+        self.expected_url = {}
+        for recipe in self.module_load.get_recipies():
+            self.expected_url[recipe.name] = sanitizeFilename(recipe.category) + '.html#' + recipe.name.lower()
+
+
+
+
     def create_folder_structure(self) -> None:
         """
         Creates, and if necessary clears, target folders.
@@ -107,8 +124,13 @@ class ExportToHtml(export_interface.ExportInterface, export_base.ExportBase):
 
         This function uses self.index_pages, which is built in export_pages().
         """
-        #path_to_file_out = join(self.page_folders['index'], 'Version.3')
-        #timestamp = self.helper.get_timestamp()
-        #self.helper.write_template_to_file(self.path_to_main_template, path_to_file_out, {'timestamp': timestamp})
+        # Build dict for template
+        self.create_expected_url()
+        replaceDict = {'timestamp': self.helper.get_timestamp(),
+                       'tags': self.module_load.get_tags_as_dict(),
+                       'expected_url': self.expected_url}
+
+        path_to_file_out = join(self.page_folders['index'], 'Tags.2')
+        self.helper.write_template_to_file(self.path_to_main_template, path_to_file_out, replaceDict)
         pass
 
